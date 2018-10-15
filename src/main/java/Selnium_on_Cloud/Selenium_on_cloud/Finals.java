@@ -3,9 +3,9 @@
 public interface Finals {
 	String url = "https://www.facebook.com/";
 
-	String email = "lirannh@gmail.com";
+	String email = "USERNAME";
 	
-	String password = "liranzxc1234";
+	String password = "PASSWORD";
 	
 	
 	String GroupName = "מזכרת שבלב";
