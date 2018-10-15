@@ -15,6 +15,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.LocalFileDetector;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -55,16 +56,15 @@ public class FacebookInstrgram implements Finals {
 	private static void UploadToGroup(WebDriver driver, Actions action, String path, String message)
 			throws InterruptedException {
 		// TODO Auto-generated method stub
-		
-        JavascriptExecutor js = (JavascriptExecutor)driver;		
 
 		try {
 
-			//js.executeAsyncScript("$x(\"//a[@label='Write Post']\")[0].click();");
-			
-			driver.findElement(By.xpath("//a[@label='Write Post']")).click();;
+			// js.executeAsyncScript("$x(\"//a[@label='Write Post']\")[0].click();");
+
+			driver.findElement(By.xpath("//a[@label='Write Post']")).click();
+			;
 			Thread.sleep(1000);
-			
+
 			WebElement uploadPhoto = driver.findElement(By.name("composer_photo[]"));
 
 			System.out.println("Found UploadPhoto element");
@@ -88,7 +88,7 @@ public class FacebookInstrgram implements Finals {
 			ex.printStackTrace();
 
 			driver.navigate().refresh();
-			
+
 			driver.quit();
 		}
 
@@ -97,26 +97,28 @@ public class FacebookInstrgram implements Finals {
 	private static void OpenGroupPage(final WebDriver driver, String groupname) throws InterruptedException {
 		// TODO Auto-generated method stub
 
-		try {
-			WebElement Searchtext = driver.findElement(By.name("q"));
-			Searchtext.sendKeys(groupname);
 
-		} catch (org.openqa.selenium.StaleElementReferenceException ex) {
-			WebElement Searchtext = driver.findElement(By.name("q"));
-			Searchtext.sendKeys(groupname);
+			try {
+				WebElement Searchtext = driver.findElement(By.name("q"));
+				Searchtext.sendKeys(groupname);
 
-		}
+			} catch (org.openqa.selenium.StaleElementReferenceException ex) {
+				WebElement Searchtext = driver.findElement(By.name("q"));
+				Searchtext.sendKeys(groupname);
 
-		Thread.sleep(2000);
-		WebElement searchbutton = driver.findElement(By.xpath("//button[contains(@aria-label,'Search')]"));
-		searchbutton.submit();
+			}
 
-		Thread.sleep(2000);
+			Thread.sleep(2000);
+			WebElement searchbutton = driver.findElement(By.xpath("//button[contains(@aria-label,'Search')]"));
+			searchbutton.submit();
 
-		WebElement grouplink = driver.findElement(By.partialLinkText(groupname));
-		grouplink.click();
+			Thread.sleep(2000);
 
-		Thread.sleep(10000);
+			WebElement grouplink = driver.findElement(By.partialLinkText(groupname));
+			grouplink.click();
+
+			Thread.sleep(10000);
+		
 
 	}
 
@@ -149,18 +151,31 @@ public class FacebookInstrgram implements Finals {
 	private static void init() throws MalformedURLException {
 		// TODO Auto-generated method stub
 
-		options = new ChromeOptions();
+		 options = new ChromeOptions();
 
-		options.addArguments("test-type");
-		options.addArguments("disable-popup-blocking");
-		options.addArguments("--disable-notifications");
-	  //  options.addArguments("--headless");
+		// options.addArguments("test-type");
+		 options.addArguments("--disable-popup-blocking");
+		 options.addArguments("--disable-notifications");
+
+		DesiredCapabilities caps = new DesiredCapabilities();
+		caps.setCapability("browser", "Chrome");
+		caps.setCapability("browser_version", "62.0");
+		caps.setCapability("os", "Windows");
+		caps.setCapability("os_version", "10");
+		caps.setCapability("resolution", "1024x768");
+		caps.setCapability("browserstack.debug", true);
+		caps.setCapability(ChromeOptions.CAPABILITY, options);
+
+		driver = new RemoteWebDriver(new URL(URL), caps);
+
+		// options.addArguments("--headless");
 //http://165.227.102.118:4444/grid/console
-	//	 System.setProperty("webdriver.chrome.driver", "C:\\sel\\chromedriver.exe");
-	driver = new RemoteWebDriver(new URL("http://165.227.102.118:4444/wd/hub"), options);
+		// System.setProperty("webdriver.chrome.driver", "C:\\sel\\chromedriver.exe");
+		// driver = new RemoteWebDriver(new URL("http://165.227.102.118:4444/wd/hub"),
+		// options);
 		((RemoteWebDriver) driver).setFileDetector(new LocalFileDetector());
-		//driver = new ChromeDriver(options);
-		
+		// driver = new ChromeDriver(options);
+
 		System.out.println("done");
 
 	}
